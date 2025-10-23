@@ -1,0 +1,29 @@
+extends KinematicBody2D
+
+
+# vars
+   # Velocidade do personagem
+var speed = 200
+var gravity = 1100
+var jump_force = -300
+   # A direção do movimento (vetor de movimento)
+var velocity = Vector2()
+
+
+func _process(delta):
+	# Aplica a gravidade
+	velocity.y += gravity * delta
+
+	# Movimento lateral
+	velocity.x = 0
+	if Input.is_action_pressed("ui_right"):
+		velocity.x += speed
+	if Input.is_action_pressed("ui_left"):
+		velocity.x -= speed
+
+	# Pulo
+	if is_on_floor() and Input.is_action_just_pressed("ui_up"):
+		velocity.y = jump_force
+
+	# Move o personagem e lida com colisões
+	velocity = move_and_slide(velocity, Vector2.UP)
